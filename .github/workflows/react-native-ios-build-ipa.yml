@@ -1,0 +1,57 @@
+name: react-native-android-build-apk
+on:
+  push:
+    branches:
+      - master
+jobs:
+  install-and-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          npm install
+  build-android:
+    needs: install-and-test
+    runs-on: macos-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          npm install
+      # - name: Build Android Release
+      #   run: |
+      #     cd android && chmod +x ./gradlew && ./gradlew assembleRelease
+      #   # cd android && ./gradlew assembleRelease
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: app-release.apk
+      #     path: android/app/build/outputs/apk/release/
+      - name: init cocoapods
+        run: cd ios && sudo gem install cocoapods && pod install
+      - name: iOS Build Action
+        uses: yukiarrr/ios-build-action@v0.5.0
+        with:
+          # Project path
+          project-path: RnY26netCi.xcodeproj
+          # Base64 encoded p12 file
+          # p12-base64: 
+          # Base64 encoded mobileprovision file
+          # mobileprovision-base64: 
+          # For example, iOS Distribution
+          # code-signing-identity: 
+          # Team id
+          # team-id: 
+          # Workspace path
+          # workspace-path: ios # optional, default is 
+          workspace-path: RnY26netCi.xcworkspace # optional, default is 
+          # Choose app-store, ad-hoc, package, enterprise, development, or developer-id
+          export-method: development # optional, default is app-store
+          # For example, Debug, Release
+          # configuration: # optional, default is Release
+          # Certificate password
+          # certificate-password: # optional, default is 
+          # Output path of ipa
+          # output-path: # optional, default is output.ipa
+
