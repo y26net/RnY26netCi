@@ -1,4 +1,4 @@
-name: react-native-android-build-apk
+name: react-native-ios-build-ipa
 on:
   push:
     branches:
@@ -11,7 +11,7 @@ jobs:
       - name: Install npm dependencies
         run: |
           npm install
-  build-android:
+  build-ios:
     needs: install-and-test
     runs-on: macos-latest
     steps: 
@@ -30,11 +30,13 @@ jobs:
       #     path: android/app/build/outputs/apk/release/
       - name: init cocoapods
         run: cd ios && sudo gem install cocoapods && pod install
+      - name: show dir
+        run: ls
       - name: iOS Build Action
         uses: yukiarrr/ios-build-action@v0.5.0
         with:
           # Project path
-          project-path: RnY26netCi.xcodeproj
+          project-path: ios/RnY26netCi.xcodeproj
           # Base64 encoded p12 file
           # p12-base64: 
           # Base64 encoded mobileprovision file
@@ -45,7 +47,7 @@ jobs:
           # team-id: 
           # Workspace path
           # workspace-path: ios # optional, default is 
-          workspace-path: RnY26netCi.xcworkspace # optional, default is 
+          workspace-path: ios/RnY26netCi.xcworkspace # optional, default is 
           # Choose app-store, ad-hoc, package, enterprise, development, or developer-id
           export-method: development # optional, default is app-store
           # For example, Debug, Release
