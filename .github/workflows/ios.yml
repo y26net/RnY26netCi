@@ -1,0 +1,54 @@
+name: IOS CI
+
+on:
+  push:
+    # 在指定的远程分支上，发生推送
+    branches: master
+    
+jobs:
+  build:
+    # 该job 运行的系统环境，支持ubuntu 、windows、macOS
+    runs-on: macos-latest
+
+    steps:
+    # step：检查分支
+    # - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+      with:
+        persist-credentials: false
+
+    - name: Specify node version
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Fastlane setup
+      # working-directory: packages/mobile
+      run: |
+        sudo gem install fastlane -NV
+
+    # step：初始化项目package.json
+    - name: Install and Build
+      run: |
+        npm install
+    
+    - name: Deploy iOS & Upload to TestFlight
+      working-directory: ios
+      # env:
+      #   MATCH_KEYCHAIN_NAME: ${{ secrets.MATCH_KEYCHAIN_NAME }}
+      #   MATCH_KEYCHAIN_PASSWORD: ${{ secrets.MATCH_KEYCHAIN_PASSWORD }}
+      #   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      #   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+      #   FASTLANE_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      #   pat: ${{ secrets.pat }}
+      run: |
+        fastlane ios beta_ci
+
+    # step：上传apk 到action，在右上角查看
+    # 官方文档 https://help.github.com/cn/actions/automating-your-workflow-with-github-actions/persisting-workflow-data-using-artifacts#uploading-build-and-test-artifacts
+    # - name: Upload IPA
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: app
+    #     path: android/app/build/outputs/apk/release/app-release.apk
