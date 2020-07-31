@@ -134,6 +134,12 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        missingDimensionStrategy 'react-native-camera', 'general' // <--- insert this line
+        multiDexEnabled true
+        manifestPlaceholders = [
+            JPUSH_APPKEY: "aaaa35a84d5b74d8ee5c10f7",         //在此替换你的APPKey
+            JPUSH_CHANNEL: "default_developer"                          //在此替换你的channel
+        ]
     }
     splits {
         abi {
@@ -150,6 +156,18 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release { 
+            storeFile file('my-release-key.keystore')
+            storePassword '123456'
+            keyAlias 'my-key-alias'
+            keyPassword '123456'
+            // if(project.hasProperty('MYAPP_RELEASE_STORE_FILE')) { 
+            //     storeFile file(MYAPP_RELEASE_STORE_FILE) 
+            //     storePassword MYAPP_RELEASE_STORE_PASSWORD
+            //     keyAlias MYAPP_RELEASE_KEY_ALIAS 
+            //     keyPassword MYAPP_RELEASE_KEY_PASSWORD 
+            //  } 
+        }
     }
     buildTypes {
         debug {
@@ -158,7 +176,8 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -191,6 +210,10 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(':jpush-react-native')  // 添加 jpush 依赖
+    implementation project(':jcore-react-native')  // 添加 jcore 依赖
+    
+    implementation 'com.android.support:multidex:1.0.3'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 

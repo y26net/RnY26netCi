@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./im-js-sdk.js"></script>
+  </head>
+  <body>
+    <script>
+      var im = new IMSdk();
+      im.setA();
+      console.log(im);
+      //   ----------------------------------
+      var apiBaseUrl = 'https://api.netease.im/nimserver/user';
+      var apis = [];
+      var types = {};
+      var api = new Api('createUser', apiBaseUrl + '/create.action');
+      apis.push(api);
+      api = new Api('updateUser', apiBaseUrl + '/update.action');
+      apis.push(api);
+      api = new Api('refreshToken', apiBaseUrl + '/refreshToken.action');
+      apis.push(api);
+      api = new Api('blockUser', apiBaseUrl + '/block.action');
+      apis.push(api);
+      api = new Api('unblockUser', apiBaseUrl + '/unblock.action');
+      apis.push(api);
+      var apis = {apis: apis, types: types};
+      console.log(apis);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+      body,
+      html,
+      #allmap {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        margin: 0;
+      }
+      #l-map {
+        height: 100%;
+        width: 78%;
+        float: left;
+        border-right: 2px solid #bcbcbc;
+      }
+      #r-result {
+        height: 100%;
+        width: 20%;
+        float: left;
+      }
+    </style>
+    <script
+      type="text/javascript"
+      src="http://api.map.baidu.com/api?v=1.5&ak=9fb983ecd9b505f8fedcc9ab07c65e3e"
+    ></script>
+    <script
+      type="text/javascript"
+      src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"
+    ></script>
+    <title>GPS转百度</title>
+  </head>
+  <body>
+    <div id="allmap"></div>
+  </body>
+</html>
+<script type="text/javascript">
+  //GPS坐标
+  var xx = 104.049851;
+  var yy = 30.562136;
+  var gpsPoint = new BMap.Point(xx, yy);
+
+  //地图初始化
+  var bm = new BMap.Map('allmap');
+  bm.centerAndZoom(gpsPoint, 15);
+  bm.addControl(new BMap.NavigationControl());
+
+  //添加谷歌marker和label
+  var markergps = new BMap.Marker(gpsPoint);
+  bm.addOverlay(markergps); //添加GPS标注
+  var labelgps = new BMap.Label('我是GPS标注哦', {
+    offset: new BMap.Size(20, -10),
+  });
+  markergps.setLabel(labelgps); //添加GPS标注
+
+  //坐标转换完之后的回调函数
+  translateCallback = function (point) {
+    var marker = new BMap.Marker(point);
+    bm.addOverlay(marker);
+    var label = new BMap.Label('我是百度标注哦', {
+      offset: new BMap.Size(20, -10),
+    });
+    marker.setLabel(label); //添加百度label
+    bm.setCenter(point);
+    alert('转化为百度坐标为：' + point.lng + ',' + point.lat);
+  };
+
+  setTimeout(function () {
+    BMap.Convertor.translate(gpsPoint, 0, translateCallback); //真实经纬度转成百度坐标
+  }, 2000);
+</script>
+
+<!-- 找到百度的API转换方法为：
+　　　　http://api.map.baidu.com/ag/coord/convert?from=0&to=4&x=longitude&y=latitude
+　　　　其中：
+　　　　from: 来源坐标系   （0表示原始GPS坐标，2表示Google坐标）
+  　　　 to: 转换后的坐标   （4就是百度自己啦，好像这个必须是4才行）
+   　　   x: 经度
+            y: 纬度
+            返回的结果是一个json字符串：
+           {"error":0,"x":"MTIxLjUwMDIyODIxNDk2","y":"MzEuMjM1ODUwMjYwMTE3"}
+
+            其中：
+            error：是结果是否出错标志位，"0"表示OK
+            x: 百度坐标系的经度(Base64加密)
+            y: 百度坐标系的纬度(Base64加密) -->

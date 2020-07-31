@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - _test_/*
 jobs:
   install-and-test:
     runs-on: macos-latest
@@ -31,20 +33,28 @@ jobs:
       - name: init cocoapods
         run: cd ios && sudo gem install cocoapods && pod install
       - name: show dir
-        run: ls
+        run: cd ios && ls
+      # - uses: yukiarrr/ios-build-action@v0.5.1
+      #   with:
+      #     project-path: Unity-iPhone.xcodeproj
+      #     p12-base64: ${{ secrets.P12_BASE64 }}
+      #     mobileprovision-base64: ${{ secrets.MOBILEPROVISION_BASE64 }}
+      #     code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
+      #     team-id: ${{ secrets.TEAM_ID }}
+      #     workspace-path: Unity-iPhone.xcworkspace
       - name: iOS Build Action
         uses: yukiarrr/ios-build-action@v0.5.0
         with:
           # Project path
           project-path: ios/RnY26netCi.xcodeproj
           # Base64 encoded p12 file
-          # p12-base64: 
+          p12-base64: ios/ca-tax.p12
           # Base64 encoded mobileprovision file
-          # mobileprovision-base64: 
+          mobileprovision-base64: ios/rntaxapp.mobileprovision
           # For example, iOS Distribution
           # code-signing-identity: 
           # Team id
-          # team-id: 
+          team-id: C5ZW694LZ9
           # Workspace path
           # workspace-path: ios # optional, default is 
           workspace-path: ios/RnY26netCi.xcworkspace # optional, default is 
@@ -56,4 +66,3 @@ jobs:
           # certificate-password: # optional, default is 
           # Output path of ipa
           # output-path: # optional, default is output.ipa
-
