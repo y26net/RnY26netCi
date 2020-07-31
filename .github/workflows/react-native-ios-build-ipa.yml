@@ -16,7 +16,7 @@ jobs:
   build-ios:
     needs: install-and-test
     runs-on: macos-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
@@ -52,17 +52,17 @@ jobs:
           # Base64 encoded mobileprovision file
           mobileprovision-base64: ios/rntaxapp.mobileprovision
           # For example, iOS Distribution
-          # code-signing-identity: 
+          # code-signing-identity:
           # Team id
           team-id: C5ZW694LZ9
           # Workspace path
-          # workspace-path: ios # optional, default is 
-          workspace-path: ios/RnY26netCi.xcworkspace # optional, default is 
+          # workspace-path: ios # optional, default is
+          # workspace-path: ios/RnY26netCi.xcworkspace # optional, default is
           # Choose app-store, ad-hoc, package, enterprise, development, or developer-id
           export-method: development # optional, default is app-store
           # For example, Debug, Release
           # configuration: # optional, default is Release
           # Certificate password
-          # certificate-password: # optional, default is 
+          # certificate-password: # optional, default is
           # Output path of ipa
           # output-path: # optional, default is output.ipa
